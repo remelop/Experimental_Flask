@@ -1,0 +1,35 @@
+USE desarrollo_web;
+
+-- 1. TABLA USERS (para autenticación)
+CREATE TABLE IF NOT EXISTS users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(80) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL
+);
+
+-- 2. TABLA PRODUCTOS (para el inventario)
+CREATE TABLE IF NOT EXISTS productos (
+    id_producto INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(255) NOT NULL,
+    precio DECIMAL(10,2) NOT NULL,
+    stock INT NOT NULL
+);
+
+-- 3. TABLA CLIENTES (para gestión de clientes)
+CREATE TABLE IF NOT EXISTS clientes (
+    id_cliente INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    telefono VARCHAR(20)
+);
+
+-- 4. TABLA PIVOTE CLIENTES_PRODUCTOS (para las compras/relaciones)
+CREATE TABLE IF NOT EXISTS clientes_productos (
+    id_cliente INT,
+    id_producto INT,
+    cantidad INT NOT NULL,
+    fecha_compra TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id_cliente, id_producto),
+    FOREIGN KEY (id_cliente) REFERENCES clientes(id_cliente) ON DELETE CASCADE,
+    FOREIGN KEY (id_producto) REFERENCES productos(id_producto) ON DELETE CASCADE
+);
