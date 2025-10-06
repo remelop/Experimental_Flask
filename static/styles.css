@@ -1,0 +1,222 @@
+/* ------------------------------------------------------------------- */
+/* PALETA DE COLORES */
+/* Primario (Acción/Header): #00897B (Teal Oscuro) */
+/* Secundario (Fondo/Contenedor): #F5F5F5 (Gris Muy Claro) */
+/* Texto Principal: #37474F (Azul Grisáceo Oscuro - Charcoal) */
+/* Sombra: rgba(0, 0, 0, 0.15) */
+/* ------------------------------------------------------------------- */
+
+/* Estilos generales del cuerpo */
+body {
+    font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #F5F5F5; /* Fondo muy claro */
+    color: #37474F; /* Texto principal oscuro */
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* Estilos para el contenedor principal del contenido */
+.content-container {
+    flex: 1;
+    padding: 30px; /* Más padding para aire */
+    max-width: 900px; /* Un poco más ancho */
+    margin: 30px auto;
+    background-color: #ffffff; /* Fondo blanco para el contenido */
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15); /* Sombra suave y profesional */
+}
+
+/* Estilos de encabezado y navegación */
+header {
+    background-color: #00897B; /* Teal Oscuro (Color Primario) */
+    color: #fff;
+    padding: 1.5rem 1rem;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+header h1 {
+    margin: 0;
+    font-size: 2.5rem;
+    letter-spacing: 0.5px;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    margin: 0.75rem 0 0;
+}
+
+nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    padding: 0.75rem 1.25rem;
+    font-weight: 500;
+    border-radius: 6px;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+}
+
+nav ul li a:hover {
+    background-color: #004D40; /* Tono de Teal más oscuro al pasar el ratón */
+    transform: translateY(-1px); /* Efecto 3D sutil */
+}
+
+/* Estilos de formularios */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    font-weight: 600; /* Un poco más de peso */
+    margin-bottom: 0.5rem;
+    color: #37474F;
+    font-size: 0.95rem;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+select {
+    padding: 0.85rem;
+    border: 1px solid #ddd; /* Borde más claro */
+    border-radius: 8px;
+    font-size: 1rem;
+    color: #37474F;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+input:focus, select:focus {
+    border-color: #00897B; /* Color del borde al enfocar */
+    box-shadow: 0 0 0 3px rgba(0, 137, 123, 0.2); /* Sombra sutil para enfocar */
+    outline: none;
+}
+
+/* Estilos de botones de ACCIÓN PRIMARIA */
+button[type="submit"], .btn-primary {
+    padding: 1rem;
+    border: none;
+    background-color: #00897B; /* Teal Oscuro (Primario) */
+    color: white;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+}
+
+button[type="submit"]:hover, .btn-primary:hover {
+    background-color: #004D40; /* Tono más oscuro al pasar el ratón */
+    transform: translateY(-1px);
+}
+
+/* Estilos de botones SECUNDARIOS (Ej: Eliminar) */
+.btn-danger {
+    background-color: #E57373; /* Rojo suave para peligro */
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-danger:hover {
+    background-color: #D32F2F; /* Rojo más fuerte al pasar el ratón */
+}
+
+/* Estilos de pie de página */
+footer {
+    text-align: center;
+    padding: 1rem;
+    background-color: #37474F; /* Gris oscuro para el pie de página */
+    color: #fff;
+    margin-top: auto;
+    font-size: 0.9rem;
+    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* Estilos para mensajes flash/alertas */
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    text-align: center;
+    font-weight: 500;
+}
+
+.alert-success {
+    color: #2E7D32; /* Verde más oscuro */
+    background-color: #E8F5E9; /* Verde muy claro */
+    border-color: #C8E6C9;
+}
+
+.alert-error {
+    color: #D32F2F; /* Rojo más oscuro */
+    background-color: #FFEBEE; /* Rojo muy claro */
+    border-color: #FFCDD2;
+}
+
+/* ------------------------------------------------------------------- */
+/* ESTILOS DE TABLAS MEJORADOS */
+/* ------------------------------------------------------------------- */
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1.5rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    border-radius: 10px;
+    overflow: hidden; /* Asegura que los bordes redondeados se apliquen al contenido */
+}
+
+th, td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #ECEFF1; /* Línea de división muy sutil */
+    font-size: 0.95rem;
+}
+
+th {
+    background-color: #00897B; /* Color principal para el encabezado de la tabla */
+    color: white;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Estilo de fila al pasar el ratón (hover) */
+tbody tr:hover {
+    background-color: #F0F4F7; /* Gris muy claro para el efecto hover */
+    transition: background-color 0.3s ease;
+}
+
+/* Estilos para columnas de acciones para que se vean bien */
+.acciones-col {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap; /* Para asegurar buena visualización en móvil */
+}
+
+/* Ajuste para el botón de registro de compra en la tabla de clientes */
+.btn-action {
+    padding: 8px 12px;
+    font-size: 0.85rem;
+    border-radius: 6px;
+}
