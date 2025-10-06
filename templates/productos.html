@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block title %}Lista de Productos{% endblock %}
+
+{% block content %}
+    <h1 class="mb-4">Inventario de Productos</h1>
+    <a href="{{ url_for('crear_producto') }}" class="btn btn-primary mb-3 shadow-sm">
+        <i class="bi bi-plus-circle"></i> ➕ Registrar Nuevo Producto
+    </a>
+
+    {% if productos %}
+    <div class="table-responsive">
+        <table class="table table-striped table-hover align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Precio</th>
+                    <th scope="col">Stock</th>
+                    <th scope="col" class="text-center">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for producto in productos %}
+                <tr>
+                    <th scope="row">{{ producto.id_producto }}</th>
+                    <td>{{ producto.nombre }}</td>
+                    <td><span class="badge bg-success">${{ "%.2f"|format(producto.precio) }}</span></td>
+                    <td>
+                        <span class="badge bg-{{ 'danger' if producto.stock < 1 else 'warning' if producto.stock < 10 else 'info' }}">
+                            {{ producto.stock }} unidades
+                        </span>
+                    </td>
+                    <td class="text-center" style="min-width: 180px;">
+                        <a href="{{ url_for('editar_producto', id_producto=producto.id_producto) }}" class="btn btn-sm btn-warning me-2">
+                            ✏️ Editar
+                        </a>
+                        
+                        <form 
+    method="POST" 
+    action="{{ url_for('eliminar_producto', id_producto=producto.id_producto) }}" 
+    style="display:inline;"
+>
+    <button 
+        type="submit" 
+        class="btn btn-sm btn-danger" 
+        onclick="return confirm('¿Estás seguro de que deseas eliminar {{ producto.nombre }}?')"
+    >
+        🗑️ Eliminar
+    </button>
+</form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+        <div class="alert alert-info border-0 shadow-sm" role="alert">
+            No se encontraron productos en el inventario. ¡Crea el primero!
+        </div>
+    {% endif %}
+
+    <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header bg-danger text-white">
+            <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmar Eliminación</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            ¿Estás seguro de que deseas eliminar el producto **<span id="productNamePlaceholder"></span>**? Esta acción es irreversible.
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <form id="deleteForm" method="POST" action="">
+                <button type="submit" class="btn btn-danger">Eliminar Definitivamente</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Lógica para pasar los datos del producto al modal de Bootstrap
+    const confirmDeleteModal = document.getElementById('confirmDeleteModal');
+    
+    // --- ÚNICA CORRECCIÓN CLAVE ---
+    // Generamos la URL base de Flask con un marcador de posición que JS pueda reemplazar.
+    // Esto asegura que la URL /eliminar/ID se construya correctamente.
+    const deleteUrlTemplate = '{{ url_for("eliminar_producto", id_producto="ID_PLACEHOLDER") }}';
+    
+    if (confirmDeleteModal) {
+        confirmDeleteModal.addEventListener('show.bs.modal', function (event) {
+            
+            const button = event.relatedTarget;
+            const idProducto = button.getAttribute('data-producto-id');
+            const nombreProducto = button.getAttribute('data-producto-nombre');
+            
+            const modalTitle = confirmDeleteModal.querySelector('#productNamePlaceholder');
+            const deleteForm = confirmDeleteModal.querySelector('#deleteForm'); // Referencia al formulario
+            
+            // 1. Actualizar el nombre del producto en el cuerpo del modal
+            modalTitle.textContent = nombreProducto;
+            
+            // 2. Actualizar la acción del formulario con el ID del producto
+            // Sustituimos el marcador de posición por el ID real
+            deleteForm.action = deleteUrlTemplate.replace('ID_PLACEHOLDER', idProducto);
+        });
+    }
+</script>
+{% endblock %}

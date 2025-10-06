@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}Registrar Nueva Compra{% endblock %}
+
+{% block content %}
+
+<div class="container mt-5">
+<div class="row justify-content-center">
+<div class="col-md-8 col-lg-6">
+<div class="card shadow-lg p-4 rounded-3">
+<h1 class="card-title text-center text-info mb-4"><i class="bi bi-cart-plus-fill me-2"></i> Registrar Nueva Compra</h1>
+
+            <form method="POST" action="{{ url_for('registrar_compra', cliente_id_opcional=0) }}">
+                
+                <!-- Campo de Cliente -->
+                <div class="mb-3">
+                    <label for="id_cliente" class="form-label fw-bold">Cliente:</label>
+                    <select class="form-select" id="id_cliente" name="id_cliente" required>
+                        {% if cliente_seleccionado %}
+                            <!-- Opción preseleccionada si viene de la lista de clientes -->
+                            <option value="{{ cliente_seleccionado.id_cliente }}" selected>{{ cliente_seleccionado.nombre }}</option>
+                            <option disabled>--- Otros Clientes ---</option>
+                        {% else %}
+                            <option value="" selected disabled>Seleccione un Cliente</option>
+                        {% endif %}
+                        
+                        {% for cliente in clientes %}
+                            <!-- Evitar duplicar la opción si ya está preseleccionada -->
+                            {% if not cliente_seleccionado or cliente.id_cliente != cliente_seleccionado.id_cliente %}
+                                <option value="{{ cliente.id_cliente }}">{{ cliente.nombre }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Campo de Producto -->
+                <div class="mb-3">
+                    <label for="id_producto" class="form-label fw-bold">Producto:</label>
+                    <select class="form-select" id="id_producto" name="id_producto" required>
+                        <option value="" selected disabled>Seleccione un Producto</option>
+                        {% for producto in productos %}
+                            <option value="{{ producto.id_producto }}">
+                                {{ producto.nombre }} (Stock: {{ producto.stock }}) - ${{ "%.2f"|format(producto.precio) }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                    {% if not productos %}
+                    <p class="text-danger mt-2">No hay productos disponibles con stock para la venta.</p>
+                    {% endif %}
+                </div>
+
+                <!-- Campo de Cantidad -->
+                <div class="mb-3">
+                    <label for="cantidad" class="form-label fw-bold">Cantidad:</label>
+                    <input type="number" class="form-control" id="cantidad" name="cantidad" min="1" required placeholder="Ej: 1 o 5">
+                </div>
+
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-info text-white btn-lg mt-3">
+                        <i class="bi bi-floppy-fill me-2"></i> Registrar Compra
+                    </button>
+                    <a href="{{ url_for('leer_clientes') }}" class="btn btn-outline-secondary btn-sm">
+                        Cancelar
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+</div>
+{% endblock %}

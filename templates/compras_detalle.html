@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compras de {{ nombre_cliente }}</title>
+    <!-- Incluir Tailwind CSS CDN para estilos rápidos -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f7f7f7; }
+        .card { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1); }
+        /* Estilo para la tabla en móvil */
+        @media (max-width: 640px) {
+            .responsive-table th, .responsive-table td {
+                padding: 10px;
+                display: block;
+                text-align: left;
+            }
+            .responsive-table th {
+                background-color: #f1f5f9;
+                font-weight: 700;
+                border-bottom: 1px solid #e2e8f0;
+            }
+            .responsive-table td::before {
+                content: attr(data-label);
+                float: left;
+                font-weight: bold;
+                margin-right: 10px;
+            }
+            .responsive-table tr {
+                margin-bottom: 15px;
+                display: block;
+                border: 1px solid #e2e8f0;
+                border-radius: 8px;
+                overflow: hidden;
+            }
+        }
+    </style>
+</head>
+<body class="p-4 sm:p-8">
+    <div class="max-w-4xl mx-auto">
+        <header class="mb-6 flex justify-between items-center">
+            <h1 class="text-3xl font-extrabold text-gray-800">
+                Historial de Compras de <span class="text-indigo-600">{{ nombre_cliente }}</span>
+            </h1>
+            <a href="{{ url_for('leer_clientes') }}" class="flex items-center text-indigo-600 hover:text-indigo-800 transition duration-150">
+                <!-- Icono de flecha izquierda -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+                </svg>
+                Volver a Clientes
+            </a>
+        </header>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="mb-4 p-3 rounded-lg text-sm {% if category == 'success' %}bg-green-100 text-green-700{% elif category == 'error' %}bg-red-100 text-red-700{% else %}bg-blue-100 text-blue-700{% endif %}" role="alert">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <div class="bg-white p-6 rounded-xl card overflow-x-auto">
+            {% if compras %}
+                <table class="min-w-full divide-y divide-gray-200 responsive-table">
+                    <thead class="bg-gray-50 hidden sm:table-header-group">
+                        <tr>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Producto
+                            </th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Cantidad
+                            </th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Fecha de Compra
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        {% for compra in compras %}
+                            <tr class="hover:bg-gray-50 transition duration-100">
+                                <!-- Producto (Columna 1) -->
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900" data-label="Producto:">
+                                    {{ compra.nombre_producto }}
+                                </td>
+                                <!-- Cantidad (Columna 2) -->
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" data-label="Cantidad:">
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                        {{ compra.cantidad }}
+                                    </span>
+                                </td>
+                                <!-- Fecha de Compra (Columna 3 - CLAVE) -->
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" data-label="Fecha:">
+                                    <!-- 
+                                        La columna 'fecha_compra_raw' es un objeto datetime de Python/MySQLdb.
+                                        Usamos el método strftime para formatearlo como 'Día/Mes/Año Hora:Minuto'. 
+                                    -->
+                                    {% if compra.fecha_compra_raw %}
+                                        <span class="text-gray-700">
+                                            {{ compra.fecha_compra_raw.strftime('%d/%b/%Y %H:%M') }}
+                                        </span>
+                                    {% else %}
+                                        <span class="text-red-500">Fecha no disponible</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <div class="text-center py-10">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2m-9 0V3h4v2m-9 0V3h4v2m8 0V3h4v2" />
+                    </svg>
+                    <h3 class="mt-2 text-sm font-medium text-gray-900">Sin Compras</h3>
+                    <p class="mt-1 text-sm text-gray-500">
+                        Este cliente aún no ha registrado ninguna compra.
+                    </p>
+                    <div class="mt-6">
+                        <a href="{{ url_for('registrar_compra', cliente_id_opcional=cliente_id) }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            Registrar nueva compra
+                        </a>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+        
+        <footer class="mt-8 text-center text-sm text-gray-500">
+            Sistema de Gestión de Inventario y Clientes - Desarrollado con Flask y MySQL
+        </footer>
+
+    </div>
+</body>
+</html>

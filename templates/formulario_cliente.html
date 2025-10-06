@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {% if action == 'crear' %}Crear Cliente{% else %}Editar Cliente{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-lg border-0 rounded-3">
+                <div class="card-header bg-primary text-white text-center">
+                    {% if action == 'crear' %}
+                        <h3 class="mb-0">➕ Crear Nuevo Cliente</h3>
+                    {% else %}
+                        <h3 class="mb-0">✏️ Editar Cliente: {{ cliente.nombre }}</h3>
+                    {% endif %}
+                </div>
+                <div class="card-body p-4">
+                    <!-- Mostrar mensajes flash -->
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            {% for category, message in messages %}
+                                <div class="alert alert-{{ 'danger' if category == 'error' else 'success' }} alert-dismissible fade show" role="alert">
+                                    {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+
+                    <!-- Determinar la acción del formulario -->
+                    {% if action == 'crear' %}
+                        <form method="POST" action="{{ url_for('crear_cliente') }}">
+                    {% else %}
+                        <form method="POST" action="{{ url_for('editar_cliente', id_cliente=id_cliente) }}">
+                    {% endif %}
+
+                        <!-- Campo Nombre -->
+                        <div class="mb-3">
+                            <label for="nombre" class="form-label fw-bold">Nombre del Cliente</label>
+                            <input type="text" class="form-control" id="nombre" name="nombre" required 
+                                   value="{{ cliente.nombre if cliente else '' }}" placeholder="Nombre completo o razón social">
+                        </div>
+
+                        <!-- Campo Email -->
+                        <div class="mb-3">
+                            <label for="email" class="form-label fw-bold">Email</label>
+                            <input type="email" class="form-control" id="email" name="email" required 
+                                   value="{{ cliente.email if cliente else '' }}" placeholder="ejemplo@correo.com">
+                        </div>
+                        
+                        <!-- Campo Teléfono -->
+                        <div class="mb-4">
+                            <label for="telefono" class="form-label fw-bold">Teléfono</label>
+                            <input type="text" class="form-control" id="telefono" name="telefono" 
+                                   value="{{ cliente.telefono if cliente else '' }}" placeholder="Ej: 555-1234567">
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="{{ url_for('leer_clientes') }}" class="btn btn-secondary me-md-2">
+                                <i class="bi bi-x-circle"></i> Cancelar
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                {% if action == 'crear' %}
+                                    <i class="bi bi-save"></i> Guardar Cliente
+                                {% else %}
+                                    <i class="bi bi-arrow-repeat"></i> Actualizar Cliente
+                                {% endif %}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

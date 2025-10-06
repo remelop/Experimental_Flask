@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}Registro de Usuario{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-lg-5 col-md-7 col-sm-10">
+        <div class="card shadow-lg border-0 rounded-3">
+            <div class="card-header bg-primary text-white text-center">
+                <h3 class="mb-0">📝 Registro de Usuario</h3>
+            </div>
+            <div class="card-body p-4">
+                <form method="POST" action="{{ url_for('registro') }}">
+                    
+                    <!-- Campo Nombre de Usuario -->
+                    <div class="mb-3">
+                        <label for="username" class="form-label fw-bold">Nombre de usuario</label>
+                        <input type="text" class="form-control" id="username" name="username" required 
+                               placeholder="Define un nombre de usuario">
+                    </div>
+
+                    <!-- Campo Contraseña -->
+                    <div class="mb-3">
+                        <label for="password" class="form-label fw-bold">Contraseña</label>
+                        <input type="password" class="form-control" id="password" name="password" required 
+                               placeholder="Mínimo 8 caracteres">
+                    </div>
+
+                    <!-- NUEVO CAMPO: Confirmar Contraseña -->
+                    <div class="mb-4">
+                        <label for="confirm_password" class="form-label fw-bold">Confirmar Contraseña</label>
+                        <input type="password" class="form-control" id="confirm_password" name="confirm_password" required 
+                               placeholder="Repite la contraseña">
+                    </div>
+
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary btn-lg">Registrar</button>
+                    </div>
+                </form>
+            </div>
+            <div class="card-footer text-center bg-light">
+                <p class="mb-0">
+                    ¿Ya tienes una cuenta? <a href="{{ url_for('login') }}" class="text-decoration-none fw-bold">Inicia sesión aquí</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
